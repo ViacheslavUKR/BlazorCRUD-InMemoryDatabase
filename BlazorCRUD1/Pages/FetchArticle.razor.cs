@@ -46,9 +46,9 @@ namespace BlazorCRUD1.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            await JS.InvokeAsync<string>("Log", "FetchArticle InitializedAsync");
 
-            if (appDbContext.ArticleList is null) {
+            if (appDbContext.ArticleList is null)
+            {
                 var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
                 optionsBuilder.UseInMemoryDatabase("BlazorCRUD1");
                 appDbContext = new AppDbContext(optionsBuilder.Options);
@@ -63,6 +63,11 @@ namespace BlazorCRUD1.Pages
             totalRecords = await articleManager.Count(searchTerm);
             totalPages = (int)Math.Ceiling(totalRecords / (decimal)pageSize);
             SetPagerSize("forward");
+        }
+
+        protected override Task OnAfterRenderAsync(bool firstRender)
+        {
+            return JS.InvokeVoidAsync("Log", "FetchArticle InitializedAsync").AsTask();
         }
 
 
